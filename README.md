@@ -129,6 +129,12 @@ automation:
 
 ## 📝 Changelog
 
+### v1.1.2
+- 🔧 Correcciones menores y optimizaciones de estructura.
+
+### v1.1.1
+- ⬆️ **Actualización**: Se sube el requisito mínimo de Home Assistant a la versión `2026.2.0`.
+
 ### v1.1.0
 - 🔄 **Cambio importante**: el estado del sensor ahora es el nombre del mes en inglés en minúsculas (`january` … `december`) en lugar del número (1–12), facilitando el uso de `condition: state` directamente.
 - Se elimina el atributo `month_name` (redundante con el estado). Se mantienen `month_name_es`, `month_number` e `year`.
