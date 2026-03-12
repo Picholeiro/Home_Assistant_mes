@@ -7,14 +7,25 @@ from homeassistant.const import CONF_NAME
 from homeassistant.helpers.event import async_track_time_interval
 import homeassistant.util.dt as dt_util
 
+from .const import DOMAIN, DEFAULT_NAME
+
 _LOGGER = logging.getLogger(__name__)
 
-DOMAIN = "mes_del_ano"
+MESES_ES = [
+    "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+    "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+]
+
+
+async def async_setup_entry(hass, config_entry, async_add_entities):
+    """Configurar el sensor desde una entrada del Config Flow (UI)."""
+    name = config_entry.data.get(CONF_NAME, DEFAULT_NAME)
+    async_add_entities([MesSensor(name)], True)
 
 
 async def async_setup_platform(hass, config, async_add_entities, discovery_info=None):
-    """Configurar la plataforma del sensor."""
-    name = config.get(CONF_NAME, "Mes actual")
+    """Configurar el sensor desde configuration.yaml (compatibilidad legacy)."""
+    name = config.get(CONF_NAME, DEFAULT_NAME)
     async_add_entities([MesSensor(name)], True)
 
 
@@ -23,18 +34,18 @@ class MesSensor(SensorEntity):
 
     def __init__(self, name):
         self._attr_name = name
-        self._attr_unique_id = f"mes_del_ano_{name}"
+        self._attr_unique_id = f"mes_del_ano_{name.lower().replace(' ', '_')}"
         self._attr_icon = "mdi:calendar-month"
         self._state = None
         self._last_month = None
 
     @property
     def native_value(self):
-        """Devuelve el número del mes actual."""
+        """Devuelve el número del mes actual (1-12)."""
         return self._state
 
     async def async_added_to_hass(self):
-        """Cuando se añade la entidad, programar actualizaciones cada hora."""
+        """Registrar actualizaciones automáticas al añadir la entidad."""
         await super().async_added_to_hass()
         async_track_time_interval(
             self.hass, self.async_update, timedelta(hours=1)
@@ -51,12 +62,9 @@ class MesSensor(SensorEntity):
             self._state = current_month
             self._attr_extra_state_attributes = {
                 "month_name": current_time.strftime("%B"),
-                "month_name_es": [
-                    "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
-                    "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
-                ][current_month - 1],
+                "month_name_es": MESES_ES[current_month - 1],
                 "year": current_time.year,
                 "month_number": current_month,
             }
             self.async_write_ha_state()
-            _LOGGER.debug("Sensor actualizado: mes %s", current_month)
+            _LOGGER.debug("Sensor actualizado: mes %s (%s)", current_month, MESES_ES[current_month - 1])
