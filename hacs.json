@@ -1,0 +1,10 @@
+{
+    "name": "Mes del Año",
+    "content_in_root": false,
+    "render_readme": true,
+    "homeassistant": "2023.1.0",
+    "country": [
+        "ES"
+    ],
+    "description": "Sensor que devuelve el número y nombre del mes actual del año."
+}

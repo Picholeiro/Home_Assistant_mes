@@ -1,0 +1,9 @@
+{
+    "state": {
+        "sensor": {
+            "mes_del_ano": {
+                "name": "Mes del Año"
+            }
+        }
+    }
+}

@@ -1,0 +1,14 @@
+{
+    "domain": "mes_del_ano",
+    "name": "Mes del Año",
+    "version": "1.0.0",
+    "documentation": "https://github.com/Picholeiro/Home_Assistant_mes",
+    "issue_tracker": "https://github.com/Picholeiro/Home_Assistant_mes/issues",
+    "requirements": [],
+    "dependencies": [],
+    "codeowners": [
+        "@Picholeiro"
+    ],
+    "iot_class": "local_polling",
+    "homeassistant": "2023.1.0"
+}
