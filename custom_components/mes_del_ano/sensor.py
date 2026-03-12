@@ -16,6 +16,11 @@ MESES_ES = [
     "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
 ]
 
+MESES_EN = [
+    "january", "february", "march", "april", "may", "june",
+    "july", "august", "september", "october", "november", "december"
+]
+
 
 async def async_setup_entry(hass, config_entry, async_add_entities):
     """Configurar el sensor desde una entrada del Config Flow (UI)."""
@@ -30,7 +35,7 @@ async def async_setup_platform(hass, config, async_add_entities, discovery_info=
 
 
 class MesSensor(SensorEntity):
-    """Sensor que devuelve el mes actual del año."""
+    """Sensor que devuelve el mes actual del año como nombre en inglés."""
 
     def __init__(self, name):
         self._attr_name = name
@@ -41,7 +46,7 @@ class MesSensor(SensorEntity):
 
     @property
     def native_value(self):
-        """Devuelve el número del mes actual (1-12)."""
+        """Devuelve el nombre del mes en inglés en minúsculas (january ... december)."""
         return self._state
 
     async def async_added_to_hass(self):
@@ -59,12 +64,15 @@ class MesSensor(SensorEntity):
 
         if current_month != self._last_month:
             self._last_month = current_month
-            self._state = current_month
+            self._state = MESES_EN[current_month - 1]
             self._attr_extra_state_attributes = {
-                "month_name": current_time.strftime("%B"),
                 "month_name_es": MESES_ES[current_month - 1],
-                "year": current_time.year,
                 "month_number": current_month,
+                "year": current_time.year,
             }
             self.async_write_ha_state()
-            _LOGGER.debug("Sensor actualizado: mes %s (%s)", current_month, MESES_ES[current_month - 1])
+            _LOGGER.debug(
+                "Sensor actualizado: %s (%s)",
+                self._state,
+                MESES_ES[current_month - 1],
+            )

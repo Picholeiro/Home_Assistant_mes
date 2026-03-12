@@ -1,14 +1,21 @@
 # Mes del Año
 
-Sensor que devuelve el **número y nombre del mes actual** del año.
+Sensor que devuelve el **nombre del mes actual** en inglés como estado, ideal para automatizaciones sencillas con `condition: state`.
 
 ## Estado del sensor
 
-El sensor devuelve un valor entre `1` (Enero) y `12` (Diciembre).
+El estado es el nombre del mes en inglés en minúsculas:
+
+| Mes | Estado |
+|-----|--------|
+| Enero | `january` |
+| Febrero | `february` |
+| Marzo | `march` |
+| ... | ... |
+| Diciembre | `december` |
 
 ## Atributos disponibles
 
-- `month_name` — Nombre del mes en inglés (ej. `March`)
 - `month_name_es` — Nombre del mes en español (ej. `Marzo`)
 - `month_number` — Número del mes (ej. `3`)
 - `year` — Año actual (ej. `2026`)

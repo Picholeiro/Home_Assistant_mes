@@ -4,15 +4,15 @@
 [![GitHub release](https://img.shields.io/github/release/Picholeiro/Home_Assistant_mes.svg)](https://github.com/Picholeiro/Home_Assistant_mes/releases)
 ![Mantenido](https://img.shields.io/maintenance/yes/2026.svg)
 
-Integración custom para **Home Assistant** que expone un sensor con el **número y nombre del mes actual** del año, útil para automatizaciones estacionales o condicionales.
+Integración custom para **Home Assistant** que expone un sensor con el **nombre del mes actual** como estado, permitiendo automatizaciones sencillas con `condition: state`, al estilo de los sensores de fecha nativos de HA.
 
 ---
 
 ## ✨ Características
 
-- 🔢 Devuelve el **número del mes** (1–12) como estado del sensor
-- 🌍 Incluye el **nombre del mes en español e inglés** como atributos
-- ♻️ Se actualiza automáticamente **cada hora** (detecta cambio de mes al instante)
+- 🗓️ Devuelve el **nombre del mes en inglés** (`january` … `december`) como estado del sensor
+- 🌍 Incluye el **nombre en español** y el **número de mes** como atributos
+- ♻️ Se actualiza automáticamente **cada hora** (detecta el cambio de mes de forma inmediata)
 - ⚡ Sin dependencias externas
 
 ---
@@ -37,7 +37,7 @@ Integración custom para **Home Assistant** que expone un sensor con el **númer
 
 ## ⚙️ Configuración
 
-Añade en tu `configuration.yaml`:
+Puedes añadirlo desde la UI de Home Assistant (**Ajustes → Dispositivos y servicios → Añadir integración → Mes del Año**) o en `configuration.yaml`:
 
 ```yaml
 sensor:
@@ -49,17 +49,36 @@ sensor:
 
 ## 📊 Estado y Atributos del sensor
 
-| Campo | Valor de ejemplo |
+El **estado** (`state`) del sensor es el nombre del mes en inglés en minúsculas:
+
+| Mes | Estado |
+|-----|--------|
+| Enero | `january` |
+| Febrero | `february` |
+| Marzo | `march` |
+| Abril | `april` |
+| Mayo | `may` |
+| Junio | `june` |
+| Julio | `july` |
+| Agosto | `august` |
+| Septiembre | `september` |
+| Octubre | `october` |
+| Noviembre | `november` |
+| Diciembre | `december` |
+
+### Atributos adicionales
+
+| Atributo | Valor de ejemplo |
 |---|---|
-| **Estado** | `3` |
-| `month_name` | `March` |
 | `month_name_es` | `Marzo` |
 | `month_number` | `3` |
 | `year` | `2026` |
 
 ---
 
-## 💡 Ejemplo de automatización
+## 💡 Ejemplos de automatización
+
+### Condición simple por nombre de mes
 
 ```yaml
 automation:
@@ -67,14 +86,55 @@ automation:
     trigger:
       - platform: state
         entity_id: sensor.mes_actual
-    condition:
-      - condition: template
-        value_template: "{{ states('sensor.mes_actual') | int in [6, 7, 8] }}"
+        to: "june"
     action:
       - service: input_boolean.turn_on
         target:
           entity_id: input_boolean.modo_verano
 ```
+
+### Condición usando `condition: state`
+
+```yaml
+condition:
+  - condition: state
+    entity_id: sensor.mes_actual
+    state: "december"
+```
+
+### Varios meses con template
+
+```yaml
+condition:
+  - condition: template
+    value_template: >
+      {{ states('sensor.mes_actual') in ['june', 'july', 'august'] }}
+```
+
+### Notificación de inicio de mes
+
+```yaml
+automation:
+  - alias: "Aviso inicio de mes"
+    trigger:
+      - platform: state
+        entity_id: sensor.mes_actual
+    action:
+      - service: notify.mobile_app
+        data:
+          message: "¡Empieza {{ state_attr('sensor.mes_actual', 'month_name_es') }}!"
+```
+
+---
+
+## 📝 Changelog
+
+### v1.1.0
+- 🔄 **Cambio importante**: el estado del sensor ahora es el nombre del mes en inglés en minúsculas (`january` … `december`) en lugar del número (1–12), facilitando el uso de `condition: state` directamente.
+- Se elimina el atributo `month_name` (redundante con el estado). Se mantienen `month_name_es`, `month_number` e `year`.
+
+### v1.0.0
+- Versión inicial. Estado numérico (1–12).
 
 ---
 
