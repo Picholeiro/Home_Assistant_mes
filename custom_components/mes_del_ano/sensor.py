@@ -16,9 +16,10 @@ MESES_ES = [
     "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
 ]
 
-MESES_EN = [
-    "january", "february", "march", "april", "may", "june",
-    "july", "august", "september", "october", "november", "december"
+# Estado del sensor: nombre en español en minúsculas (enero … diciembre)
+MESES_STATE = [
+    "enero", "febrero", "marzo", "abril", "mayo", "junio",
+    "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
 ]
 
 
@@ -46,7 +47,7 @@ class MesSensor(SensorEntity):
 
     @property
     def native_value(self):
-        """Devuelve el nombre del mes en inglés en minúsculas (january ... december)."""
+        """Devuelve el nombre del mes en español en minúsculas (enero ... diciembre)."""
         return self._state
 
     async def async_added_to_hass(self):
@@ -64,7 +65,7 @@ class MesSensor(SensorEntity):
 
         if current_month != self._last_month:
             self._last_month = current_month
-            self._state = MESES_EN[current_month - 1]
+            self._state = MESES_STATE[current_month - 1]
             self._attr_extra_state_attributes = {
                 "month_name_es": MESES_ES[current_month - 1],
                 "month_number": current_month,
@@ -72,7 +73,7 @@ class MesSensor(SensorEntity):
             }
             self.async_write_ha_state()
             _LOGGER.debug(
-                "Sensor actualizado: %s (%s)",
+                "Sensor actualizado: %s (mes %s)",
                 self._state,
-                MESES_ES[current_month - 1],
+                current_month,
             )

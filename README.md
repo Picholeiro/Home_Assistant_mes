@@ -53,18 +53,18 @@ El **estado** (`state`) del sensor es el nombre del mes en inglés en minúscula
 
 | Mes | Estado |
 |-----|--------|
-| Enero | `january` |
-| Febrero | `february` |
-| Marzo | `march` |
-| Abril | `april` |
-| Mayo | `may` |
-| Junio | `june` |
-| Julio | `july` |
-| Agosto | `august` |
-| Septiembre | `september` |
-| Octubre | `october` |
-| Noviembre | `november` |
-| Diciembre | `december` |
+| Enero | `enero` |
+| Febrero | `febrero` |
+| Marzo | `marzo` |
+| Abril | `abril` |
+| Mayo | `mayo` |
+| Junio | `junio` |
+| Julio | `julio` |
+| Agosto | `agosto` |
+| Septiembre | `septiembre` |
+| Octubre | `octubre` |
+| Noviembre | `noviembre` |
+| Diciembre | `diciembre` |
 
 ### Atributos adicionales
 
@@ -86,20 +86,23 @@ automation:
     trigger:
       - platform: state
         entity_id: sensor.mes_actual
-        to: "june"
+        to: "junio"
     action:
       - service: input_boolean.turn_on
         target:
           entity_id: input_boolean.modo_verano
 ```
 
-### Condición usando `condition: state`
+### Condición con varios meses usando `condition: state`
 
 ```yaml
 condition:
   - condition: state
     entity_id: sensor.mes_actual
-    state: "december"
+    state:
+      - junio
+      - julio
+      - agosto
 ```
 
 ### Varios meses con template
@@ -108,7 +111,7 @@ condition:
 condition:
   - condition: template
     value_template: >
-      {{ states('sensor.mes_actual') in ['june', 'july', 'august'] }}
+      {{ states('sensor.mes_actual') in ['junio', 'julio', 'agosto'] }}
 ```
 
 ### Notificación de inicio de mes
@@ -122,12 +125,15 @@ automation:
     action:
       - service: notify.mobile_app
         data:
-          message: "¡Empieza {{ state_attr('sensor.mes_actual', 'month_name_es') }}!"
+          message: "¡Empieza {{ states('sensor.mes_actual') | capitalize }}!"
 ```
 
 ---
 
 ## 📝 Changelog
+
+### v1.1.3
+- 🇪🇸 **Cambio**: el estado del sensor ahora es el nombre del mes en **español** en minúsculas (`enero` … `diciembre`), facilitando el uso de `condition: state` en español directamente.
 
 ### v1.1.2
 - 🔧 Correcciones menores y optimizaciones de estructura.
