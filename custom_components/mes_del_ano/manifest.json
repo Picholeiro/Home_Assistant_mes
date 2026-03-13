@@ -1,7 +1,7 @@
 {
     "domain": "mes_del_ano",
     "name": "Mes del Año",
-    "version": "1.1.3",
+    "version": "1.1.4",
     "documentation": "https://github.com/Picholeiro/Home_Assistant_mes",
     "issue_tracker": "https://github.com/Picholeiro/Home_Assistant_mes/issues",
     "requirements": [],

@@ -2,7 +2,7 @@
 import logging
 from datetime import timedelta
 
-from homeassistant.components.sensor import SensorEntity
+from homeassistant.components.sensor import SensorEntity, SensorDeviceClass
 from homeassistant.const import CONF_NAME
 from homeassistant.helpers.event import async_track_time_interval
 import homeassistant.util.dt as dt_util
@@ -42,6 +42,8 @@ class MesSensor(SensorEntity):
         self._attr_name = name
         self._attr_unique_id = f"mes_del_ano_{name.lower().replace(' ', '_')}"
         self._attr_icon = "mdi:calendar-month"
+        self._attr_device_class = SensorDeviceClass.ENUM
+        self._attr_options = MESES_STATE
         self._state = None
         self._last_month = None
 

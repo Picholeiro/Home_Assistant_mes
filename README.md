@@ -132,6 +132,9 @@ automation:
 
 ## 📝 Changelog
 
+### v1.1.4
+- ✨ **Mejora**: Añadido `device_class: enum` y `options` al sensor. Ahora al crear automatizaciones en la interfaz gráfica, Home Assistant **te mostrará un menú desplegable** para seleccionar los meses en lugar de tener que escribirlos a mano.
+
 ### v1.1.3
 - 🇪🇸 **Cambio**: el estado del sensor ahora es el nombre del mes en **español** en minúsculas (`enero` … `diciembre`), facilitando el uso de `condition: state` en español directamente.
 
